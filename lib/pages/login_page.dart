@@ -1,3 +1,4 @@
+import 'package:example_firebase/components/components.dart';
 import 'package:example_firebase/pages/pages.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -18,54 +19,22 @@ class _LoginPageState extends State<LoginPage> {
   Widget _rowField({
     required TextEditingController controller,
     required TextInputType keyboard,
-    required String text
+    required String text,
+    required IconData iconData,
   }) {
-    return TextFormField(
+    return ComponentTextFormField(
       controller: controller,
-      textInputAction: TextInputAction.newline,
-      keyboardType: keyboard,
-      autocorrect: false,
-      decoration: InputDecoration(
-        labelText: text,
-        filled: true,
-        isDense: true,
-        focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(14),
-        borderSide: BorderSide.none
-      ),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(18),
-          borderSide: BorderSide.none
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(18),
-          borderSide: BorderSide.none
-        ),),
-
+      keyboard: keyboard,
+      text: text,
+      icon: iconData,
     );
   }
 
-  Widget _rowButton() {
-    return FractionallySizedBox(
-      widthFactor: 0.60,
-      child: Padding(
-          padding: const EdgeInsets.all(5.0),
-          child: Container(
-              height: 60,
-              decoration: BoxDecoration(
-                  color: Colors.blue,
-                  border: Border.all(color: Colors.black45,),
-                  borderRadius: BorderRadius.circular(16),
-                ),
-              child: TextButton.icon(
-                icon: const Icon(Icons.login, color: Colors.white, size: 26.0,),
-                label: const Text('Entrar', style: TextStyle(color: Colors.white, fontSize: 18.0),),
-                onPressed: () {
-                  login();
-                },
-              )
-          ),
-      ),
+  Widget _rowButton({required IconData icon, required String text, required GestureTapCallback onPressed}) {
+    return ComponentButton(
+      iconData: icon,
+      text: text,
+      onPressed: onPressed,
     );
   }
 
@@ -78,11 +47,24 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                _rowField(controller: _emailController, keyboard: TextInputType.emailAddress, text: 'E-mail'),
+                _rowField(
+                    controller: _emailController,
+                    keyboard: TextInputType.emailAddress,
+                    text: 'E-mail',
+                    iconData: Icons.email
+                ),
                 const SizedBox(height: 12,),
-                _rowField(controller: _passwordController, keyboard: TextInputType.text, text: "Senha"),
+                _rowField(
+                    controller: _passwordController,
+                    keyboard: TextInputType.text,
+                    text: "Senha",
+                    iconData: Icons.password
+                ),
                 const SizedBox(height: 12,),
-                _rowButton()
+                _rowButton(icon: Icons.login, text: 'Entrar', onPressed: () => _login()),
+                const SizedBox(height: 12,),
+                _rowButton(icon: Icons.person_add_alt_1, text: 'Criar Conta', onPressed: () =>
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const CreateUserPage()))),
               ],
             ),
           ),
@@ -90,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  login() async {
+  _login() async {
 
     try {
       UserCredential userCredential = await _firebaseAuth.signInWithEmailAndPassword(
@@ -98,6 +80,7 @@ class _LoginPageState extends State<LoginPage> {
           password: _passwordController.text
       );
       if (userCredential != null) {
+        snack(message: 'Parabéns, você está logado', type: true);
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => const HomePage())
@@ -105,19 +88,21 @@ class _LoginPageState extends State<LoginPage> {
       }
     } on FirebaseAuthException catch(error) {
         if (error.code == 'user-not-found') {
-            snack(message: 'Usuário não encontrado');
+            _passwordController.clear();
+            snack(message: 'Não foi possível encontrar usuário');
         } else if (error.code == 'wrong-password') {
-            snack(message: 'Senha incorreta');
+            _passwordController.clear();
+            snack(message: 'Por favor insira uma senha correta');
         }
     }
-
+    _passwordController.clear();
 }
 
-  void snack({required String message}) {
+  void snack({required String message, bool? type = false}) {
      ScaffoldMessenger.of(context).showSnackBar(
          SnackBar(
             content: Text(message),
-            backgroundColor: Colors.redAccent,
+            backgroundColor: type == true ? Colors.green : Colors.redAccent,
          ),
      );
   }
