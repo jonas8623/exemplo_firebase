@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "701919807017",
+    "project_id": "my-first-project-firebase-jfq",
+    "storage_bucket": "my-first-project-firebase-jfq.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:701919807017:android:6c368710dc0e17cf057e38",
+        "android_client_info": {
+          "package_name": "quirino.jonas.example_firebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "701919807017-cmoqlcg04j9t4ichbvfc4repaen7n5d2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyABTpq9VqWqe3R98HZb9hl6AWtsneqEIjQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "701919807017-cmoqlcg04j9t4ichbvfc4repaen7n5d2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
