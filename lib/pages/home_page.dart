@@ -17,11 +17,17 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text("Home Page"),
+        elevation: 4.0,
+      ),
       body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text("Home Page", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
+              const Text("Parabés usuário, você conseguiu acessar",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
               const SizedBox(height: 12,),
               ComponentButton(
                 iconData: Icons.logout,

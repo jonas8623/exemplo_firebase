@@ -88,14 +88,13 @@ class _LoginPageState extends State<LoginPage> {
       }
     } on FirebaseAuthException catch(error) {
         if (error.code == 'user-not-found') {
+            snack(message: 'Não foi possível encontrar o usuário');
             _passwordController.clear();
-            snack(message: 'Não foi possível encontrar usuário');
         } else if (error.code == 'wrong-password') {
-            _passwordController.clear();
             snack(message: 'Por favor insira uma senha correta');
+            _passwordController.clear();
         }
     }
-    _passwordController.clear();
 }
 
   void snack({required String message, bool? type = false}) {
